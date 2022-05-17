@@ -110,3 +110,65 @@ promise.then((response) => {
   console.log(response)
 })
 ```
+
+### Async Await
+An async function allows you to handle asynchronous code in a manner that appears synchronous. async functions still use promises under the hood, but have a more traditional JavaScript syntax. In this section, you will try out examples of this syntax.
+
+```ruby
+async function getData(){
+try{
+
+const users=await fetch(URL)
+
+const res= await users.json()
+
+console.log(res);
+
+}
+
+catch (err){
+
+console.log(err.message)
+
+}
+
+}
+```
+
+### Promise.all
+
+The Promise.all() method takes an iterable of promises as an input, and returns a single Promise that resolves to an array of the results of the input promises. This returned promise will resolve when all of the input's promises have resolved, or if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or non-promises throwing an error, and will reject with this first rejection message / error.
+
+```ruby
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'foo');
+});
+
+Promise.all([promise1, promise2, promise3]).then((values) => {
+  console.log(values);
+});
+// expected output: Array [3, 42, "foo"]
+```
+
+## How can you make API requests in a parallel manner and in waterfall manner?
+
+### Parallel Manner API requests
+To avoid slow execution, we can send all the API calls at once and execute them in parallel. As a result, there is no particular order in which the calls finish their execution, but their execution times do not add up since they run together.
+- Making Parallel Calls in JavaScript
+It can be tricky to figure out how to make parallel but asynchronous API calls. In JavaScript, you can use the Promise.all() method to achieve this.
+- The Promise.all() method takes an array of promises as an input and returns a single promise that resolves to the results of all the input promises. Every API call is essentially a promise, so we can feed all the API calls in Promise.all(), which will execute them together.
+- Check out the following code, which implements parallel calls:
+```ruby
+const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Array of ids
+const responses = await Promise.all(
+	ids.map(async id => {
+		const res = await fetch(
+			`https://jsonplaceholder.typicode.com/posts/${id}`
+		); // Send request for each id
+	})
+);
+```
+### Waterfall Manner API requests
+Waterfall API calls are executed one by one, i.e., the second call is made after the first call completes. This approach is not ideal for performance because if you have ten requests and each request takes one second to execute, the total execution time will add up to ten seconds.
